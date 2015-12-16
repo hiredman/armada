@@ -11,6 +11,19 @@ The code runs as some go-loops and communicates via core.async
 channels. The test namespace `com.manigfeald.http` has an example of
 wiring it up to http via ring.
 
+## Performance
+
+
+Here is a plot of node counts and milliseconds till all the nodes are
+aware of all the others:
+
+![consensus plot](/plots/consensus.png?raw=true)
+
+Here is a plot of node counts and milliseconds till the first node and
+the last node are aware of each other:
+
+![line plot](/plots/ling.png?raw=true)
+
 ## License
 
 Copyright © 2015 Kevin Downey
