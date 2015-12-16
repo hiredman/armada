@@ -24,6 +24,10 @@ the last node are aware of each other:
 
 ![line plot](/plots/line.png?raw=true)
 
+This information can be thought of as a lower bound on the runtime,
+any real world use over the network will likely take long and perform
+worse.
+
 ## License
 
 Copyright © 2015 Kevin Downey
