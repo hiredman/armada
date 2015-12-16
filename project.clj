@@ -1,5 +1,5 @@
-(defproject com.manigfeald/armada "0.1.0-SNAPSHOT"
-  :description "FIXME: write description"
+(defproject com.manigfeald/armada "0.1.0"
+  :description "clojure gossip based group membership"
   :url "http://example.com/FIXME"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
