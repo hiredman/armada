@@ -22,7 +22,7 @@ aware of all the others:
 Here is a plot of node counts and milliseconds till the first node and
 the last node are aware of each other:
 
-![line plot](/plots/ling.png?raw=true)
+![line plot](/plots/line.png?raw=true)
 
 ## License
 
