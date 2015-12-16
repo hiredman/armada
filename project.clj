@@ -1,4 +1,4 @@
-(defproject com.manigfeald/armada "0.1.0"
+(defproject com.manigfeald/armada "0.2.0-SNAPSHOT"
   :description "clojure gossip based group membership"
   :url "http://example.com/FIXME"
   :license {:name "Eclipse Public License"
