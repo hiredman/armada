@@ -39,9 +39,9 @@
 
 (defn run
   "me is the identifier for this thing
-  
+
   bootstrap is a collection of identifiers for this thing to bootstrap from
-  
+
   in-pings is a channel that will contain Ping records from other
   things pinging this thing
 
@@ -65,12 +65,9 @@
       (async/alt!
         abort ([_])
         (async/timeout ping-timeout) ([_]
-                                        (when-let [h (sample-any @a)]
-                                          (async/>! out-pings (->Ping me h
-                                                                      (remove nil?
-                                                                              (repeatedly
-                                                                               5
-                                                                               #(sample-good @a))))))
+                                        (let [others (remove nil? (repeatedly 8 #(sample-good @a)))]
+                                          (doseq [h (remove nil? (repeatedly 8 #(sample-any @a)))]
+                                            (async/>! out-pings (->Ping me h others))))
                                         (recur))))
     (async/go-loop []
       (async/alt!
