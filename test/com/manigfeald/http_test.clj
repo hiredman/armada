@@ -1,4 +1,4 @@
-(ns com.manigfeald.http
+(ns com.manigfeald.http-test
   (:require [clojure.test :refer :all]
             [com.manigfeald.armada :refer :all]
             [clojure.core.async :as async]
@@ -35,7 +35,8 @@
     (->Node arm j port pinger)))
 
 (deftest a-test
-  (let [nodes (reduce
+  (let [start (System/currentTimeMillis)
+        nodes (reduce
                (fn [nodes offset]
                  (conj nodes
                        (node (+ 9000 offset)
@@ -43,6 +44,7 @@
                                [(:id (:armada node))]))))
                []
                (range 10))]
-    (Thread/sleep 30000)
+    (while (apply not= 9 (for [{:keys [armada]} nodes]
+                           (count (members @(:roster armada))))))
     (doseq [{:keys [armada]} nodes]
-      (is (= 9 (count (members @(:roster armada))))))))
+      (is  (= 9 (count (members @(:roster armada))))))))

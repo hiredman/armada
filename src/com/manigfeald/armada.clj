@@ -35,9 +35,28 @@
     (when (seq hosts)
       (rand-nth (keys hosts)))))
 
-(defrecord Ping [from to other])
+(defrecord Ping [from to others])
 
-(defn run [me bootstrap in-pings out-pings ping-fails abort ping-timeout]
+(defn run
+  "me is the identifier for this thing
+  
+  bootstrap is a collection of identifiers for this thing to bootstrap from
+  
+  in-pings is a channel that will contain Ping records from other
+  things pinging this thing
+
+  out-pings will have Ping records for things that this thing wants to
+  ping
+
+  abort is a channel that when closed will cause this things go-loops
+  to exit
+
+  ping-timeout is how long to wait between pinging other things
+
+  returns map with a key `:roster` mapped to a value that is an atom
+  containing something that satisfies the Roster protocol.
+  "
+  [me bootstrap in-pings out-pings ping-fails abort ping-timeout]
   (let [a (atom (->ARoster 3 {}))]
     (async/go
       (doseq [host bootstrap]
@@ -47,16 +66,19 @@
         abort ([_])
         (async/timeout ping-timeout) ([_]
                                         (when-let [h (sample-any @a)]
-                                          (async/>! out-pings (->Ping me h (sample-good @a))))
+                                          (async/>! out-pings (->Ping me h
+                                                                      (remove nil?
+                                                                              (repeatedly
+                                                                               5
+                                                                               #(sample-good @a))))))
                                         (recur))))
     (async/go-loop []
       (async/alt!
         abort ([_])
         in-pings ([ping]
                     (swap! a add (:from ping))
-                    (when (and (:other ping)
-                               (not= (:other ping) me))
-                      (swap! a add (:other ping)))
+                    (when (seq (:others ping))
+                      (swap! a (partial reduce add) (remove #{me} (:others ping))))
                     (recur))
         ping-fails ([host]
                       (swap! a fail host)
