@@ -7,6 +7,8 @@ failing pings can detect group memebers that disapear.
 
 ## Usage
 
+`[com.manigfeald/armada "0.1.0"]`
+
 The code runs as some go-loops and communicates via core.async
 channels. The test namespace `com.manigfeald.http` has an example of
 wiring it up to http via ring.
